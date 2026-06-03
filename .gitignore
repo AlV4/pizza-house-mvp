@@ -1,0 +1,19 @@
+# Symfony
+/var/
+/vendor/
+/.phpunit.cache/
+.phpunit.result.cache
+
+# Environment overrides
+/.env.local
+/.env.local.php
+/.env.*.local
+
+# IDE
+/.idea/
+/.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

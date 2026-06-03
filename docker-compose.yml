@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pizza_postgres
+    environment:
+      POSTGRES_DB: pizza_house
+      POSTGRES_USER: pizza
+      POSTGRES_PASSWORD: pizza
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pizza -d pizza_house"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  php:
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    container_name: pizza_php
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      APP_DEBUG: ${APP_DEBUG:-1}
+      DATABASE_URL: "postgresql://pizza:pizza@postgres:5432/pizza_house?serverVersion=16&charset=utf8"
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: pizza_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/app:ro
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  messenger-consumer:
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    container_name: pizza_messenger
+    command: php bin/console messenger:consume async_events --time-limit=3600 --memory-limit=128M -vv
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      DATABASE_URL: "postgresql://pizza:pizza@postgres:5432/pizza_house?serverVersion=16&charset=utf8"
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

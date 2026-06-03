@@ -1,0 +1,8 @@
+framework:
+    router:
+        strict_requirements: ~
+
+when@prod:
+    framework:
+        router:
+            strict_requirements: null

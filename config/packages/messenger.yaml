@@ -1,0 +1,50 @@
+# ============================================================================
+# CQRS Bus Configuration
+#
+# Three distinct buses, each with its own semantics:
+#   - command.bus  → exactly one handler, sync, transactional
+#   - query.bus    → exactly one handler, sync, returns DTO, no side effects
+#   - event.bus    → zero-to-many handlers, async via Doctrine transport
+#
+# Domain events are routed to the async transport via interface routing.
+# This means: any class implementing App\Shared\Domain\DomainEvent dispatched
+# through the event bus will be persisted to the messenger DB table and
+# consumed by the messenger-consumer worker container.
+# ============================================================================
+
+framework:
+    messenger:
+        default_bus: command.bus
+
+        buses:
+            command.bus:
+                middleware:
+                    - doctrine_transaction
+                default_middleware:
+                    allow_no_handlers: false
+
+            query.bus:
+                default_middleware:
+                    allow_no_handlers: false
+
+            event.bus:
+                default_middleware:
+                    allow_no_handlers: true
+                    allow_no_senders: true
+
+        transports:
+            async_events:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+
+        routing:
+            App\Shared\Domain\DomainEvent: async_events
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async_events: 'in-memory://'

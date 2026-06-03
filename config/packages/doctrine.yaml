@@ -1,0 +1,34 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+        use_savepoints: true
+        profiling_collect_backtrace: '%kernel.debug%'
+
+    orm:
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: false
+        controller_resolver:
+            auto_mapping: false
+
+        # ----------------------------------------------------------------------
+        # Bounded context mappings.
+        # Each context registers its own XML mappings under
+        # src/{Context}/Infrastructure/Persistence/Doctrine/Mappings/.
+        # This keeps domain entities completely free of framework concerns.
+        # ----------------------------------------------------------------------
+        mappings: {}
+            # Example registration (uncomment when implementing Kitchen):
+            # Kitchen:
+            #     type: xml
+            #     dir: '%kernel.project_dir%/src/Kitchen/Infrastructure/Persistence/Doctrine/Mappings'
+            #     prefix: 'App\Kitchen\Domain'
+            #     alias: Kitchen
+
+when@test:
+    doctrine:
+        dbal:
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'

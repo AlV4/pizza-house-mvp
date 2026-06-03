@@ -1,0 +1,27 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+            - '../src/**/Domain/Event/'
+            - '../src/**/Domain/Exception/'
+
+    # ----------------------------------------------------------------------
+    # CQRS bus interface bindings
+    # The Application layer depends on these interfaces from Shared/Application.
+    # Concrete implementations live in Shared/Infrastructure and wrap Symfony Messenger.
+    # ----------------------------------------------------------------------
+    App\Shared\Application\Bus\CommandBus:
+        alias: App\Shared\Infrastructure\Bus\MessengerCommandBus
+
+    App\Shared\Application\Bus\QueryBus:
+        alias: App\Shared\Infrastructure\Bus\MessengerQueryBus
+
+    App\Shared\Application\Bus\EventBus:
+        alias: App\Shared\Infrastructure\Bus\MessengerEventBus
