@@ -97,3 +97,11 @@ One `messenger-consumer` container, not a worker pool.
 `CLAUDE.md`, `.claude/agents/*`, and `docs/ai-workflow.md` are first-class repository artifacts.
 
 **Why.** The task explicitly required AI-driven development. Treating agent configuration as code (versioned, reviewed, structured) is the credible interpretation. Three specialized sub-agents enforce architectural rules that a single general agent would drift away from over a long session.
+
+## 17. Aggregate identifier value objects implement `__toString`
+
+Every aggregate-root identifier VO (`RecipeId`, `CookingOrderId`, `CustomerOrderId`, `StockId`, `OrderItemId`) exposes `__toString(): string` returning its raw ULID.
+
+**Why.** We map domain entities directly with no separate persistence model (see "Persistence Pragmatism" in `CLAUDE.md`), so a VO instance *is* the entity's Doctrine identifier. Doctrine ORM's `UnitOfWork` string-casts identifier values to build its identity-map hash — with an object identifier and no `__toString`, any persist throws `"object could not be converted to string"`. The custom DBAL types (`RecipeIdType` et al.) only convert the *column* value; they cannot intercept the identity-map cast.
+
+This is a deliberate, narrow concession against decision #5 ("domain entities stay 100% framework-free"): `__toString` carries no domain meaning (`value()` and `equals()` already express the VO's contract) and exists solely for the ORM. The alternatives — introducing separate persistence models + mappers, or a custom hydrator — were rejected as disproportionate to a one-line, side-effect-free accessor. Applied uniformly to all ID VOs (not just the currently-persisted Kitchen ones) so the rule is consistent and the next mapped context does not rediscover the trap. Surfaced by the first cross-context integration test, which exercises persistence end-to-end for the first time.

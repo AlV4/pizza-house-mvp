@@ -15,7 +15,7 @@
         <embedded name="recipeSnapshot" class="App\Kitchen\Domain\ValueObject\RecipeSnapshot" column-prefix="recipe_snapshot_"/>
 
         <field name="status" column="status" type="string" length="20" nullable="false"
-               enumType="App\Kitchen\Domain\ValueObject\CookingStatus"/>
+               enum-type="App\Kitchen\Domain\ValueObject\CookingStatus"/>
 
         <field name="startedAt" column="started_at" type="datetime_immutable" nullable="true"/>
 

@@ -26,4 +26,9 @@ final readonly class StockId
     {
         return $this->value === $other->value;
     }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
 }

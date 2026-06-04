@@ -29,7 +29,11 @@
     <php>
         <ini name="display_errors" value="1"/>
         <ini name="error_reporting" value="-1"/>
-        <server name="APP_ENV" value="test" force="true"/>
+        <!-- Set via <env> (not <server>) so $_ENV['APP_ENV'] is populated:
+             Dotenv::bootEnv and KernelTestCase both read $_ENV first, otherwise
+             the kernel boots in dev and framework.test stays disabled. -->
+        <env name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_CLASS" value="App\Kernel"/>
     </php>
 </phpunit>

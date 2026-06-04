@@ -47,4 +47,8 @@ when@test:
     framework:
         messenger:
             transports:
-                async_events: 'in-memory://'
+                # Handle domain events synchronously in tests so cross-context
+                # flows (e.g. CustomerOrderPlaced → StartCookingOrder) run inline
+                # on the same bus, no worker required. This is the "real bus,
+                # sync" mode the integration tests rely on.
+                async_events: 'sync://'

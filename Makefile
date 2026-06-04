@@ -39,6 +39,7 @@ test-unit: ## Run only unit tests
 	$(PHP) vendor/bin/phpunit --testsuite Unit
 
 test-integration: ## Run only integration tests
+	$(PHP) bin/console doctrine:database:create --env=test --if-not-exists --no-interaction
 	$(PHP) vendor/bin/phpunit --testsuite Integration
 
 migrate: ## Create the database (if missing) and run migrations

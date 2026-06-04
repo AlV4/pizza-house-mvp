@@ -25,3 +25,15 @@ services:
 
     App\Shared\Application\Bus\EventBus:
         alias: App\Shared\Infrastructure\Bus\MessengerEventBus
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+            public: true
+
+        # Test-only support services (event recorder). Lives under tests/, so it
+        # is not covered by the App\ resource above which only scans src/.
+        App\Tests\Support\:
+            resource: '../tests/Support/'

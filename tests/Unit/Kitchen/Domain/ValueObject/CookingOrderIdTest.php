@@ -56,4 +56,11 @@ final class CookingOrderIdTest extends TestCase
 
         self::assertFalse($a->equals($b));
     }
+
+    public function test_casts_to_its_underlying_value(): void
+    {
+        $id = new CookingOrderId(self::VALID_ULID);
+
+        self::assertSame(self::VALID_ULID, (string) $id);
+    }
 }
