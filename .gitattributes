@@ -1,0 +1,17 @@
+# Normalize line endings to LF on commit for all text files.
+# Prevents Windows/WSL checkouts from introducing CRLF, which breaks
+# shebang scripts (e.g. bin/console) when executed inside Linux containers.
+* text=auto eol=lf
+
+# Scripts that are exec'd directly must always be LF, never auto-detected.
+bin/console text eol=lf
+
+# Common binary types — never normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
