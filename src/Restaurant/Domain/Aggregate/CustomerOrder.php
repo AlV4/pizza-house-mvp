@@ -7,7 +7,7 @@ namespace App\Restaurant\Domain\Aggregate;
 use App\Restaurant\Domain\Event\CustomerOrderAccepted;
 use App\Restaurant\Domain\Event\CustomerOrderCancelled;
 use App\Restaurant\Domain\Event\CustomerOrderDelivered;
-use App\Restaurant\Domain\Event\CustomerOrderPlaced;
+use App\Shared\Domain\Event\CustomerOrderPlaced;
 use App\Restaurant\Domain\Event\CustomerOrderReady;
 use App\Restaurant\Domain\Event\OrderItemReady;
 use App\Restaurant\Domain\Exception\InvalidStatusTransition;

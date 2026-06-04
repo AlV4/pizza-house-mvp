@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Kitchen\Application\EventHandler;
 
 use App\Kitchen\Application\StartCookingOrder\StartCookingOrder;
-use App\Restaurant\Domain\Event\CustomerOrderPlaced;
+use App\Shared\Domain\Event\CustomerOrderPlaced;
 use App\Shared\Application\Bus\CommandBus;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Uid\Ulid;

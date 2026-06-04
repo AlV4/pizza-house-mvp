@@ -7,6 +7,7 @@ namespace App\Kitchen\UI\Http;
 use App\Kitchen\Application\AddIngredientToRecipe\AddIngredientToRecipe;
 use App\Kitchen\Application\ChangeRecipePrice\ChangeRecipePrice;
 use App\Kitchen\Application\CreateRecipe\CreateRecipe;
+use App\Kitchen\Application\Exception\RecipeAlreadyExistsException;
 use App\Kitchen\Application\Exception\RecipeNotFoundException;
 use App\Kitchen\Application\GetRecipe\GetRecipe;
 use App\Kitchen\Application\GetRecipe\RecipeView;
@@ -48,7 +49,7 @@ final class RecipeController
                 priceCurrency: $data['priceCurrency'] ?? '',
                 cookingTimeMinutes: (int) ($data['cookingTimeMinutes'] ?? 0),
             ));
-        } catch (\DomainException $e) {
+        } catch (RecipeAlreadyExistsException $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_CONFLICT);
         } catch (\InvalidArgumentException $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);

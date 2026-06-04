@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace App\Kitchen\Application\ListRecipes;
 
-final class ListRecipes
+final readonly class ListRecipes
 {
 }

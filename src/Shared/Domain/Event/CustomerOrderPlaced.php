@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Restaurant\Domain\Event;
+namespace App\Shared\Domain\Event;
 
 use App\Shared\Domain\DomainEvent;
 
+/**
+ * Published by Restaurant when a customer places an order.
+ * Lives in Shared so any context can subscribe without importing Restaurant\Domain.
+ */
 final readonly class CustomerOrderPlaced implements DomainEvent
 {
     /**

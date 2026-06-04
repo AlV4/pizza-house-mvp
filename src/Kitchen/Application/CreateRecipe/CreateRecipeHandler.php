@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Kitchen\Application\CreateRecipe;
 
 use App\Kitchen\Domain\Aggregate\Recipe;
+use App\Kitchen\Application\Exception\RecipeAlreadyExistsException;
 use App\Kitchen\Domain\Repository\RecipeRepository;
 use App\Kitchen\Domain\ValueObject\IngredientRequirement;
 use App\Kitchen\Domain\ValueObject\Money;
@@ -26,9 +27,7 @@ final class CreateRecipeHandler
     public function __invoke(CreateRecipe $command): void
     {
         if ($this->recipes->findByName(new RecipeName($command->name)) !== null) {
-            throw new \DomainException(
-                sprintf('A recipe named "%s" already exists.', $command->name)
-            );
+            throw RecipeAlreadyExistsException::withName($command->name);
         }
 
         $ingredients = array_map(
