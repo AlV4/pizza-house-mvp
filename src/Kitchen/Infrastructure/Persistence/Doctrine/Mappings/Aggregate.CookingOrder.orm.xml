@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Kitchen\Domain\Aggregate\CookingOrder" table="kitchen_cooking_orders">
+
+        <id name="id" type="kitchen_cooking_order_id" column="id" length="26"/>
+
+        <field name="customerOrderId" column="customer_order_id" type="string" length="26" nullable="false"/>
+
+        <field name="recipeId" column="recipe_id" type="kitchen_recipe_id" length="26" nullable="false"/>
+
+        <embedded name="recipeSnapshot" class="App\Kitchen\Domain\ValueObject\RecipeSnapshot" column-prefix="recipe_snapshot_"/>
+
+        <field name="status" column="status" type="string" length="20" nullable="false"
+               enumType="App\Kitchen\Domain\ValueObject\CookingStatus"/>
+
+        <field name="startedAt" column="started_at" type="datetime_immutable" nullable="true"/>
+
+        <field name="completedAt" column="completed_at" type="datetime_immutable" nullable="true"/>
+
+    </entity>
+
+</doctrine-mapping>

@@ -3,6 +3,10 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         use_savepoints: true
         profiling_collect_backtrace: '%kernel.debug%'
+        types:
+            kitchen_recipe_id: App\Kitchen\Infrastructure\Persistence\Doctrine\Type\RecipeIdType
+            kitchen_cooking_order_id: App\Kitchen\Infrastructure\Persistence\Doctrine\Type\CookingOrderIdType
+            kitchen_ingredients: App\Kitchen\Infrastructure\Persistence\Doctrine\Type\IngredientsType
 
     orm:
         auto_generate_proxy_classes: true
@@ -20,13 +24,12 @@ doctrine:
         # src/{Context}/Infrastructure/Persistence/Doctrine/Mappings/.
         # This keeps domain entities completely free of framework concerns.
         # ----------------------------------------------------------------------
-        mappings: {}
-            # Example registration (uncomment when implementing Kitchen):
-            # Kitchen:
-            #     type: xml
-            #     dir: '%kernel.project_dir%/src/Kitchen/Infrastructure/Persistence/Doctrine/Mappings'
-            #     prefix: 'App\Kitchen\Domain'
-            #     alias: Kitchen
+        mappings:
+            Kitchen:
+                type: xml
+                dir: '%kernel.project_dir%/src/Kitchen/Infrastructure/Persistence/Doctrine/Mappings'
+                prefix: 'App\Kitchen\Domain'
+                alias: Kitchen
 
 when@test:
     doctrine:

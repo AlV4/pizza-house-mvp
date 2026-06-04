@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Kitchen\Domain\Aggregate\Recipe" table="kitchen_recipes">
+
+        <id name="id" type="kitchen_recipe_id" column="id" length="26"/>
+
+        <embedded name="name" class="App\Kitchen\Domain\ValueObject\RecipeName" use-column-prefix="false"/>
+
+        <field name="ingredients" column="ingredients" type="kitchen_ingredients" nullable="false"/>
+
+        <embedded name="price" class="App\Kitchen\Domain\ValueObject\Money" column-prefix="price_"/>
+
+        <field name="cookingTimeMinutes" column="cooking_time_minutes" type="integer" nullable="false"/>
+
+    </entity>
+
+</doctrine-mapping>
